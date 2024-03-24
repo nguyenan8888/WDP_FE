@@ -1,3 +1,5 @@
+'use client'
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // ** React Imports
 import React, { useState, ElementType, useEffect } from 'react'
@@ -24,12 +26,12 @@ import RadioGroup from '@mui/material/RadioGroup'
 import CustomTextField from 'src/@core/components/mui/text-field'
 
 // ** Third Party Imports
-import { Editor } from "react-draft-wysiwyg";
+// import { Editor } from 'react-draft-wysiwyg'
 import { useForm } from 'react-hook-form'
 import DatePicker, { ReactDatePickerProps } from 'react-datepicker'
-import { convertToRaw, EditorState, ContentState, convertFromHTML} from 'draft-js'
+import { convertToRaw, EditorState, ContentState, convertFromHTML } from 'draft-js'
 import CustomInput from 'src/views/forms/form-elements/pickers/PickersCustomInput'
-import draftToHtml from "draftjs-to-html";
+import draftToHtml from 'draftjs-to-html'
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -99,26 +101,26 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
   // ** State
   const [open, setOpen] = useState<boolean>(false)
   const [inputValue, setInputValue] = useState<string>('')
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(new Date())
   const [bioValue, setBioValue] = useState<any>(EditorState.createEmpty())
   const [userInput, setUserInput] = useState<string>('yes')
   const [formData, setFormData] = useState<Data>(initialData)
-  const [avatar1, setAvatar] = useState<File>(null as unknown as File);
+  const [avatar1, setAvatar] = useState<File>(null as unknown as File)
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
   const [secondDialogOpen, setSecondDialogOpen] = useState<boolean>(false)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const [date, setDate] = useState<DateType>(new Date())
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState<boolean>(false)
-  const userData = storage.getProfile();
-  const router = useRouter();
+  const userData = storage.getProfile()
+  const router = useRouter()
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   const fetchData = async () => {
-    setLoading(true);
+    setLoading(true)
 
     userApi
       .profile(userData._id)
@@ -133,14 +135,14 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
             biography: data.data.user.biography,
             avatar: data.data.user.avatar
           })
-          setImgSrc(data.data.user.avatar);
+          setImgSrc(data.data.user.avatar)
           setDate(new Date(data.data.user.dob))
-          setBioValue(EditorState.createWithContent(
-            ContentState.createFromBlockArray(
-              convertFromHTML(data?.data?.user?.biography).contentBlocks
+          setBioValue(
+            EditorState.createWithContent(
+              ContentState.createFromBlockArray(convertFromHTML(data?.data?.user?.biography).contentBlocks)
             )
-          ));
-          setAvatar(data.data.user.avatar);
+          )
+          setAvatar(data.data.user.avatar)
         } else {
           toast.error(data.message)
         }
@@ -151,7 +153,7 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
       .finally(() => {
         setLoading(false)
       })
-  };
+  }
 
   // ** Hooks
   const {
@@ -172,14 +174,14 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
   }
 
   const handleInputImageChange = (file: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    const { files } = file.target as HTMLInputElement;
-  
+    const reader = new FileReader()
+    const { files } = file.target as HTMLInputElement
+
     if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result as string);
-      reader.readAsDataURL(files[0]);
-  
-      setAvatar(files[0]);
+      reader.onload = () => setImgSrc(reader.result as string)
+      reader.readAsDataURL(files[0])
+
+      setAvatar(files[0])
     }
   }
 
@@ -189,36 +191,35 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
   }
 
   const handleFormChange = (field: keyof Data, value: Data[keyof Data]) => {
-    const newValue = value.trim() === '' ? null : value;
-    console.log('newValue', newValue);
-    
+    const newValue = value.trim() === '' ? null : value
+    console.log('newValue', newValue)
+
     setFormData({ ...formData, [field]: newValue })
   }
 
   const onAccountFormSubmit = () => {
-    const { username, gender, firstName, lastName } = formData;
+    const { username, gender, firstName, lastName } = formData
     if (!username) {
       toast.error('Username is required')
-      return;
+
+      return
     }
-    const form = new FormData();
-    form.append('username', username);
-    form.append('gender', gender);
-    form.append('firstName', firstName);
-    form.append('lastName', lastName);
-    form.append('avatar', avatar1);
+    const form = new FormData()
+    form.append('username', username)
+    form.append('gender', gender)
+    form.append('firstName', firstName)
+    form.append('lastName', lastName)
+    form.append('avatar', avatar1)
     if (date) {
-      form.append('dob', date.toDateString());
+      form.append('dob', date.toDateString())
     } else {
-      form.append('dob', '');
+      form.append('dob', '')
     }
-    const content = draftToHtml(
-      convertToRaw(bioValue.getCurrentContent())
-    ).trim();
+    const content = draftToHtml(convertToRaw(bioValue.getCurrentContent())).trim()
     if (content === '<p></p>') {
-      form.append('biography', '');
+      form.append('biography', '')
     } else if (bioValue.getCurrentContent().getPlainText().trim()) {
-      form.append('biography', content);
+      form.append('biography', content)
     }
     setLoading(true)
     userApi
@@ -249,14 +250,14 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
             <CardContent sx={{ pt: 0 }}>
               <Grid container spacing={5} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Grid item xs={12} sm={12}>
-                  <Box sx={{ display: 'flex', alignItems: 'center' , width:'80%'}}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', width: '80%' }}>
                     <Avatar
                       style={{ marginRight: '10px' }}
                       alt='John Doe'
                       src={imgSrc}
                       sx={{ width: 150, height: 150 }}
                     />
-                    <div style={{width:'100%'}}>
+                    <div style={{ width: '100%' }}>
                       <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
                         Upload Photo
                         <input
@@ -293,8 +294,14 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
                   />
                 </Grid>
                 <Grid item xs={12} sm={5}>
-                  <Typography style={{fontSize:'13px'}}>Gender</Typography>
-                  <RadioGroup row aria-label='controlled' name='gender' value={formData.gender} onChange={e => handleFormChange('gender', e.target.value)}>
+                  <Typography style={{ fontSize: '13px' }}>Gender</Typography>
+                  <RadioGroup
+                    row
+                    aria-label='controlled'
+                    name='gender'
+                    value={formData.gender}
+                    onChange={e => handleFormChange('gender', e.target.value)}
+                  >
                     <FormControlLabel value='Male' control={<Radio />} label='Male' />
                     <FormControlLabel value='Female' control={<Radio />} label='Female' />
                     <FormControlLabel value='Other' control={<Radio />} label='Other' />
@@ -309,7 +316,7 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
                       onChange={(date: Date) => setDate(date)}
                       dateFormat={'dd-MM-yyyy'}
                       placeholderText='Click to select a date'
-                      customInput={<CustomInput label='D.O.B'/>}
+                      customInput={<CustomInput label='D.O.B' />}
                       name='dob'
                     />
                   </DatePickerWrapper>
@@ -335,29 +342,30 @@ const TabAccount = ({ popperPlacement }: { popperPlacement: ReactDatePickerProps
                   />
                 </Grid>
                 <Grid item xs={12} sm={12}>
-                  <Typography style={{fontSize:'13px'}}>Biography</Typography>
-                  <Editor
-                    toolbarClassName="rounded-0"
-                    wrapperClassName="toolbar-top"
-                    editorClassName="rounded-0 border-1"
+                  <Typography style={{ fontSize: '13px' }}>Biography</Typography>
+                  {/*<Editor
+                    toolbarClassName='rounded-0'
+                    wrapperClassName='toolbar-top'
+                    editorClassName='rounded-0 border-1'
                     toolbar={{
-                      options: ["inline", "textAlign", "list", "history"],
+                      options: ['inline', 'textAlign', 'list', 'history'],
                       inline: {
                         inDropdown: false,
-                        options: ["bold", "italic", "underline", "strikethrough"],
+                        options: ['bold', 'italic', 'underline', 'strikethrough']
                       },
                       list: {
                         inDropdown: false,
-                        options: ["unordered", "ordered", "indent", "outdent"],
+                        options: ['unordered', 'ordered', 'indent', 'outdent']
                       },
                       history: {
                         inDropdown: false,
-                        options: ["undo", "redo"],
-                      },
+                        options: ['undo', 'redo']
+                      }
                     }}
                     editorState={bioValue}
                     onEditorStateChange={(data: any) => setBioValue(data)}
                   />
+                  */}
                 </Grid>
                 <Grid item xs={12} sx={{ pt: theme => `${theme.spacing(6.5)} !important` }}>
                   <Button onClick={onAccountFormSubmit} variant='contained' sx={{ mr: 4 }}>
