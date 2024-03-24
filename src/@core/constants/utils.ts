@@ -1,0 +1,21 @@
+export const REACT_ACTIONS = {
+  LIKE: 'LIKE',
+  HAHA: 'HAHA',
+  WOW: 'WOW',
+  LOVE: 'LOVE',
+  SAD: 'SAD',
+  ANGRY: 'ANGRY'
+}
+
+export const NOTIFICATION_TYPES = {
+  FOLLOW: 'FOLLOW',
+  TAG: 'TAG',
+  POST: 'POST'
+}
+
+export const NOTIFICATION_RES_TYPES = {
+  LIKE: 'LIKE',
+  COMMENT: 'COMMENT',
+  ACCEPT_FOLLOW: 'ACCEPT_FOLLOW',
+  FOLLOW_REQUEST: 'FOLLOW_REQUEST'
+}
